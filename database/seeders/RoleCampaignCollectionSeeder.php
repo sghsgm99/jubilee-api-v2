@@ -1,0 +1,38 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Enums\PageTypeEnum;
+use App\Models\Enums\PermissionTypeEnum;
+use App\Models\Enums\RoleTypeEnum;
+use App\Models\RoleSetupTemplate;
+use App\Models\User;
+use Illuminate\Database\Seeder;
+
+class RoleCampaignCollectionSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $new_role_setup = [
+            'page' => PageTypeEnum::COLLECTIONS,
+            'page_name' => 'Collections',
+            'permission' => [
+                PermissionTypeEnum::CREATE,
+                PermissionTypeEnum::READ,
+                PermissionTypeEnum::UPDATE,
+                PermissionTypeEnum::DELETE,
+            ]
+        ];
+
+        $role = RoleSetupTemplate::whereRoleId(RoleTypeEnum::ADMINISTRATOR())->first();
+        $role_setup = $role->setup;
+        $role_setup[] = $new_role_setup;
+        $role->setup = $role_setup;
+        $role->save();
+    }
+}
