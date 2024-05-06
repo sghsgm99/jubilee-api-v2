@@ -71,14 +71,14 @@ class JubileeTestController extends Controller
 {
     public function test(Request $request)
     {
-        $account = Account::query()->where('id', 1)->first();
+        /*$account = Account::query()->where('id', 1)->first();
         return GmailReportService::resolve($account)->getAdsenseReport();
 
 
         $gac = GoogleAICampaign::find(9);
         $googleAICampaignService = GoogleAICampaignService::resolve(1);
 
-        return $googleAICampaignService->test($gac);
+        return $googleAICampaignService->test($gac);*/
 
         /*$gac->campaign_id ='21152854928';
         $gac->adgroup_id = '158423788497';
@@ -167,7 +167,7 @@ class JubileeTestController extends Controller
 
       //return StableDiffusionAIService::resolve()->generateAIImageEx("bmw car", 1, 608, 320);
 
-      $payload = [
+      /*$payload = [
         
         "key"=> "x3h3ueizpslehr",
         "model_id"=> "sdxl-unstable-diffus",
@@ -192,7 +192,7 @@ class JubileeTestController extends Controller
       ]);
       $result = json_decode($response->getBody()->getContents(), true);
 
-      return $result;
+      return $result;*/
 
       return "Welcome jubilee api test";
     }
