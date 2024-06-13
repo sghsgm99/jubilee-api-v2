@@ -36,7 +36,9 @@ class SiteService extends ModelService
         string $client_secret_key = null,
         string $description,
         SitePlatformEnum $platform,
-        SiteStatusEnum $status
+        SiteStatusEnum $status,
+        string $shop = null,
+        string $access_token = null
     ) {
         $site = new Site();
 
@@ -47,6 +49,8 @@ class SiteService extends ModelService
         $site->description = $description;
         $site->platform = $platform;
         $site->status = $status;
+        $site->shop = $shop;
+        $site->access_token = $access_token;
 
         $site->user_id = $user->id;
         $site->account_id = $user->account_id;
@@ -68,7 +72,9 @@ class SiteService extends ModelService
         string $client_secret_key = null,
         string $description,
         SitePlatformEnum $platform,
-        SiteStatusEnum $status
+        SiteStatusEnum $status,
+        string $shop = null,
+        string $access_token = null
     ) {
         $this->site->name = $name;
         $this->site->url = $url;
@@ -77,6 +83,8 @@ class SiteService extends ModelService
         $this->site->description = $description;
         $this->site->platform = $platform;
         $this->site->status = $status;
+        $this->site->shop = $shop;
+        $this->site->access_token = $access_token;
 
         $this->site->save();
         return $this->site->fresh();

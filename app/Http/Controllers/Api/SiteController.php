@@ -259,7 +259,9 @@ class SiteController extends Controller
             $request->validated()['client_secret_key'] ?? null,
             $request->validated()['description'],
             SitePlatformEnum::memberByValue($request->validated()['platform']),
-            SiteStatusEnum::memberByValue($request->validated()['status'])
+            SiteStatusEnum::memberByValue($request->validated()['status']),
+            $request->input('shop', null),
+            $request->input('access_token', null)
         );
 
         return ResponseService::successCreate('Site was created.', new SiteResource($site));
@@ -288,7 +290,9 @@ class SiteController extends Controller
             $request->validated()['client_secret_key'] ?? null,
             $request->validated()['description'],
             SitePlatformEnum::memberByValue($request->validated()['platform']),
-            SiteStatusEnum::memberByValue($request->validated()['status'])
+            SiteStatusEnum::memberByValue($request->validated()['status']),
+            $request->input('shop', null),
+            $request->input('access_token', null)
         );
 
         return ResponseService::success('Site was updated.', new SiteResource($site));

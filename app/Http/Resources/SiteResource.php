@@ -28,6 +28,8 @@ class SiteResource extends JsonResource
             'api_permissions' => $this->resource->api_permissions,
             'client_key' => $this->resource->client_key,
             'client_secret_key' => $this->resource->client_secret_key,
+            'shop' => $this->resource->shop,
+            'access_token' => $this->resource->access_token,
             'description' => $this->resource->description,
             'platform' => $this->resource->platform,
             'platform_label' => $this->resource->platform->getLabel(),
