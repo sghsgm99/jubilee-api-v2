@@ -211,6 +211,8 @@ Route::prefix('v1')->group(function () {
 
     /** MROAS Route */
     MROASController::unguardedRoutes();
+
+    SiteController::unguardedRoutes();
     
     Route::get('test', [JubileeTestController::class, 'test']);
 });

@@ -29,6 +29,12 @@ use Illuminate\Http\Request;
 
 class SiteController extends Controller
 {
+    public static function unguardedRoutes()
+    {
+        Route::get('shopify/install', [SiteController::class, 'installShopify']);
+        Route::get('shopify/generate_token', [SiteController::class, 'generateShopifyToken']);
+    }
+
     public static function apiRoutes()
     {
         Route::post('sites', [SiteController::class, 'create']);
@@ -330,5 +336,74 @@ class SiteController extends Controller
         }
 
         return ResponseService::success('Site was archived.');
+    }
+
+    public function installShopify(Request $request)
+    {
+        $site = Site::findOrFail($request['id']);
+        $shop = $site->shop;
+        $api_key = $site->client_key;
+
+        $scopes = "read_orders,write_products";
+        $redirect_uri = "https://jubilee-app-v2.vercel.app/shopify/generate_token";
+
+        $install_url = "https://" . $shop . ".myshopify.com/admin/oauth/authorize?client_id=" . $api_key . "&scope=" . $scopes . "&redirect_uri=" . urlencode($redirect_uri);
+
+        return redirect($install_url);
+    }
+
+    public function generateShopifyToken(Request $request)
+    {
+        $shop = $request['shop'];
+
+        $site = Site::whereRaw('? LIKE CONCAT("%", shop, "%")', [$shop])->first();
+
+        if ($site) {
+            $api_key = $site->client_key;
+            $shared_secret = $site->client_secret_key;
+            $params = $_GET; // Retrieve all request parameters
+            $hmac = $_GET['hmac'];
+
+            $params = array_diff_key($params, array('hmac' => '')); // Remove hmac from params
+            ksort($params); // Sort params lexographically
+
+            $computed_hmac = hash_hmac('sha256', http_build_query($params), $shared_secret);
+
+            // Use hmac data to check that the response is from Shopify or not
+            if (hash_equals($hmac, $computed_hmac)) {
+
+                // Set variables for our request
+                $query = array(
+                    "client_id" => $api_key, // Your API key
+                    "client_secret" => $shared_secret, // Your app credentials (secret key)
+                    "code" => $params['code'] // Grab the access key from the URL
+                );
+
+                // Generate access token URL
+                $access_token_url = "https://" . $params['shop'] . "/admin/oauth/access_token";
+
+                // Configure curl client and execute request
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_URL, $access_token_url);
+                curl_setopt($ch, CURLOPT_POST, count($query));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($query));
+                $result = curl_exec($ch);
+                curl_close($ch);
+
+                // Store the access token
+                $result = json_decode($result, true);
+                $access_token = $result['access_token'];
+
+                // Show the access token (don't do this in production!)
+                return $access_token;
+
+            } else {
+                // Someone is trying to be shady!
+                return 'This request is NOT from Shopify!';
+            }
+        }
+        
+        return "not exist shop";
     }
 }
