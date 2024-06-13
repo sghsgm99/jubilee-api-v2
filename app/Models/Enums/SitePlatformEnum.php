@@ -12,4 +12,5 @@ class SitePlatformEnum extends Enumerate
     const WORDPRESS = 1;
     const JUBILEE = 2;
     const OTHERS = 3;
+    const SHOPIFY = 4;
 }
