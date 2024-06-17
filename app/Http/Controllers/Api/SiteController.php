@@ -26,6 +26,7 @@ use App\Http\Requests\UpdateSiteThemeRequest;
 use App\Services\ResponseService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Signifly\Shopify\Shopify;
 
 class SiteController extends Controller
 {
@@ -76,6 +77,9 @@ class SiteController extends Controller
         Route::get('sites/{site}/articles', [SiteController::class, 'getSiteArticles']);
         Route::get('sites/{site}', [SiteController::class, 'get']);
         Route::get('sites', [SiteController::class, 'getCollection']);
+
+        //shopify
+        Route::get('sites/{site}/shopify/products', [SiteController::class, 'getShopifyProducts']);
     }
 
     public function getCollection(Request $request)
@@ -346,7 +350,7 @@ class SiteController extends Controller
 
         $scopes = "read_orders,write_products";
         $redirect_uri = "https://jubilee-app-v2.vercel.app/shopify/generate_token";
-
+        
         $install_url = "https://" . $shop . ".myshopify.com/admin/oauth/authorize?client_id=" . $api_key . "&scope=" . $scopes . "&redirect_uri=" . urlencode($redirect_uri);
 
         return redirect($install_url);
@@ -405,5 +409,18 @@ class SiteController extends Controller
         }
         
         return "not exist shop";
+    }
+
+    public function getShopifyProducts(Request $request, Site $site)
+    {
+        $shopify = new Shopify(
+            $site->access_token,
+            $site->shop.'.myshopify.com',
+            '2021-01'
+        );
+
+        $products = $shopify->getProducts();
+
+        return ResponseService::success('Success', $products);
     }
 }
