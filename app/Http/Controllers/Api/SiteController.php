@@ -27,6 +27,7 @@ use App\Services\ResponseService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Signifly\Shopify\Shopify;
+use App\Models\Services\SiteShopifyProductService;
 
 class SiteController extends Controller
 {
@@ -80,6 +81,7 @@ class SiteController extends Controller
 
         //shopify
         Route::get('sites/{site}/shopify/products', [SiteController::class, 'getShopifyProducts']);
+        Route::post('sites/{site}/shopify/products', [SiteController::class, 'publishShopifyProducts']);
     }
 
     public function getCollection(Request $request)
@@ -422,5 +424,19 @@ class SiteController extends Controller
         $products = $shopify->getProducts();
 
         return ResponseService::success('Success', $products);
+    }
+
+    public function publishShopifyProducts(Request $request, Site $site)
+    {
+        $products = SiteShopifyProductService::create(
+            $site,
+            $request->input('data')
+        );
+        
+        if (isset($products['error'])) {
+            return ResponseService::serverError('Ad was not created.');
+        }
+
+        return ResponseService::successCreate('Ad was created.', $products);
     }
 }
