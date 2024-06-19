@@ -179,6 +179,7 @@ return [
 
         Intervention\Image\ImageServiceProvider::class,
 
+        Signifly\Shopify\ShopifyServiceProvider::class,
     ],
 
     /*
@@ -234,6 +235,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Zip' => ZanySoft\Zip\ZipFacade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Shopify' => Signifly\Shopify\Facades\Shopify::class,
     ],
 
 ];
