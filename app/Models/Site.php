@@ -219,6 +219,11 @@ class Site extends Model implements ImageableInterface
         return $result->withTimestamps();
     }
 
+    public function shopifyProducts()
+    {
+        return $this->hasMany(SiteShopifyProduct::class);
+    }
+
     public function scopeWhereId(Builder $query, int $id)
     {
         return $query->where('id', '=', $id);
