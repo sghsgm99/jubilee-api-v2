@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use App\Scopes\AccountScope;
-use App\Traits\BaseAccountModelTrait;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Scopes\AccountScope;
+use App\Traits\BaseAccountModelTrait;
 use App\Models\Services\SiteShopifyProductService;
 
 class SiteShopifyProduct extends Model
@@ -28,8 +27,7 @@ class SiteShopifyProduct extends Model
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
-        'deleted_at' => 'datetime',
-        'data' => 'array'
+        'deleted_at' => 'datetime'
     ];
 
     protected static function boot()

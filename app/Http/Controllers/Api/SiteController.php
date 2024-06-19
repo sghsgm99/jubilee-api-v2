@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Http\Requests\CreateSiteThemeRequest;
 use App\Http\Requests\UpdateSiteAnalyticRequest;
 use App\Http\Requests\UploadSiteLogoRequest;
@@ -9,8 +13,6 @@ use App\Http\Resources\ArticleResource;
 use App\Http\Resources\SiteAnalyticsResource;
 use App\Models\Services\SiteThemeService;
 use App\Models\SiteTheme;
-use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SiteResource;
 use App\Http\Resources\SiteResourceProvisioning;
@@ -24,10 +26,8 @@ use App\Http\Requests\DeleteMultipleSiteRequest;
 use App\Http\Requests\UpdateSiteRequest;
 use App\Http\Requests\UpdateSiteThemeRequest;
 use App\Services\ResponseService;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Signifly\Shopify\Shopify;
 use App\Models\Services\SiteShopifyProductService;
+use Signifly\Shopify\Shopify;
 
 class SiteController extends Controller
 {
@@ -81,7 +81,8 @@ class SiteController extends Controller
 
         //shopify
         Route::get('sites/{site}/shopify/products', [SiteController::class, 'getShopifyProducts']);
-        Route::post('sites/{site}/shopify/products', [SiteController::class, 'publishShopifyProducts']);
+        Route::get('sites/{site}/shopify/fetch-products', [SiteController::class, 'fetchShopifyProducts']);
+        Route::post('sites/{site}/shopify/publish-products', [SiteController::class, 'publishShopifyProducts']);
     }
 
     public function getCollection(Request $request)
@@ -415,6 +416,11 @@ class SiteController extends Controller
 
     public function getShopifyProducts(Request $request, Site $site)
     {
+        return ResponseService::success('Success', $site->shopifyProducts->all());
+    }
+
+    public function fetchShopifyProducts(Request $request, Site $site)
+    {
         $shopify = new Shopify(
             $site->access_token,
             $site->shop.'.myshopify.com',
@@ -428,15 +434,22 @@ class SiteController extends Controller
 
     public function publishShopifyProducts(Request $request, Site $site)
     {
-        $products = SiteShopifyProductService::create(
-            $site,
-            $request->input('data')
-        );
-        
-        if (isset($products['error'])) {
-            return ResponseService::serverError('Ad was not created.');
+        $products = $request->input('data', null);
+
+        $site->shopifyProducts()->delete();
+
+        foreach ($products as $product) {
+            SiteShopifyProductService::create(
+                $site,
+                $product['pid'],
+                $product['title'],
+                $product['status'],
+                $product['vendor'],
+                $product['type'],
+                $product['image']
+            );
         }
 
-        return ResponseService::successCreate('Ad was created.', $products);
+        return ResponseService::successCreate('Products was created.', $products);
     }
 }
