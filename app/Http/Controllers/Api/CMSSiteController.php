@@ -54,6 +54,7 @@ class CMSSiteController extends Controller
         Route::get('cms/menu/page/bottom', [CMSSiteController::class, 'getMenuPageBottom']);
         Route::get('cms/menu/{menu}/articles', [CMSSiteController::class, 'getMenuArticles']);
         Route::get('cms/ai-articles', [CMSSiteController::class, 'getAIArticles']);
+        Route::get('cms/shopify-products', [CMSSiteController::class, 'getShopifyProducts']);
     }
 
     /**
@@ -204,5 +205,13 @@ class CMSSiteController extends Controller
         );
         
         return [$article];
+    }
+
+    public function getShopifyProducts(Request $request)
+    {
+        $site = $request->input('site');
+        $search = $request->input('search', '');
+
+        return $site->shopifyProducts->all();
     }
 }
