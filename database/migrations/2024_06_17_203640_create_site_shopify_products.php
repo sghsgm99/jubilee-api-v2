@@ -17,12 +17,7 @@ class CreateSiteShopifyProducts extends Migration
         Schema::create('site_shopify_products', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('site_id');
-            $table->bigInteger('pid');
-            $table->string('title');
-            $table->string('status');
-            $table->string('vendor')->nullable();
-            $table->string('type')->nullable();
-            $table->string('image')->nullable();
+            $table->longText('data')->nullable();
             SchemaBuilder::BelongsToUserSchemaUp($table);
         });
     }
