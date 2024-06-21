@@ -441,12 +441,7 @@ class SiteController extends Controller
         foreach ($products as $product) {
             SiteShopifyProductService::create(
                 $site,
-                $product['pid'],
-                $product['title'],
-                $product['status'],
-                $product['vendor'],
-                $product['type'],
-                $product['image']
+                $product['data']
             );
         }
 

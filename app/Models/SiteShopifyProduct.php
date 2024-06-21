@@ -27,7 +27,8 @@ class SiteShopifyProduct extends Model
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
-        'deleted_at' => 'datetime'
+        'deleted_at' => 'datetime',
+        'data' => 'array'
     ];
 
     protected static function boot()
