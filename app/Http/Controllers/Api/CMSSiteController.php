@@ -151,6 +151,7 @@ class CMSSiteController extends Controller
         $settings->favicon = $site->favicon->favicon_image ?? null;
         $settings->logo = $site->logo->logo_image ?? null;
         $settings->analytic_id = $site->view_id ?? null;
+        $settings->shopify_domain = $site->shop ?? null;
 
         return $settings;
     }
