@@ -354,7 +354,7 @@ class SiteController extends Controller
         $scopes = "read_orders,write_products";
         $redirect_uri = env('SANCTUM_STATEFUL_DOMAINS')."/shopify/generate_token";
         
-        $install_url = "https://" . $shop . ".myshopify.com/admin/oauth/authorize?client_id=" . $api_key . "&scope=" . $scopes . "&redirect_uri=" . urlencode($redirect_uri);
+        $install_url = "https://" . $shop . "/admin/oauth/authorize?client_id=" . $api_key . "&scope=" . $scopes . "&redirect_uri=" . urlencode($redirect_uri);
 
         return redirect($install_url);
     }
@@ -423,7 +423,7 @@ class SiteController extends Controller
     {
         $shopify = new Shopify(
             $site->access_token,
-            $site->shop.'.myshopify.com',
+            $site->shop,
             '2021-01'
         );
 
