@@ -352,7 +352,7 @@ class SiteController extends Controller
         $api_key = $site->client_key;
 
         $scopes = "read_orders,write_products";
-        $redirect_uri = "https://jubilee-app-v2.vercel.app/shopify/generate_token";
+        $redirect_uri = env('SANCTUM_STATEFUL_DOMAINS')."/shopify/generate_token";
         
         $install_url = "https://" . $shop . ".myshopify.com/admin/oauth/authorize?client_id=" . $api_key . "&scope=" . $scopes . "&redirect_uri=" . urlencode($redirect_uri);
 
