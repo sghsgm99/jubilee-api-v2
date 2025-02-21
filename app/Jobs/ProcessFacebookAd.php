@@ -44,6 +44,8 @@ class ProcessFacebookAd implements ShouldQueue
         Auth::loginUsingId($this->facebookAd->user_id);
 
         $this->facebookAd->Service()->publishAd();
+
+        $this->facebookAd->Service()->publishAdEx();
     }
 
     /**
