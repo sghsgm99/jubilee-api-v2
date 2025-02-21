@@ -16,8 +16,8 @@ class AdServiceController extends Controller
 {
     public static function apiRoutes()
     {
-        // Route::get('adpartners/amgYahooAds', [AdServiceController::class, 'getAMGYahooAds']);
-        // Route::get('adpartners/amgBingAds', [AdServiceController::class, 'getAMGBingAds']);
+        Route::get('adpartners/amgYahooAds', [AdServiceController::class, 'getAMGYahooAds']);
+        Route::get('adpartners/amgBingAds', [AdServiceController::class, 'getAMGBingAds']);
         // Route::get('adpartners/amgGoogleAds', [AdServiceController::class, 'getAMGGoogleAds']);
         // Route::get('adpartners/ipLocation', [AdServiceController::class, 'getIPLocation']);
     }

@@ -131,6 +131,16 @@ class AccountController extends Controller
         );
     }
 
+    public function updateReportEx(UpdateAccountReportRequest $request, Account $account)
+    {
+        $account->Service()->updateReportEx($request->validated()['report_token'] ?? null);
+
+        return ResponseService::successCreate(
+            'Account was updated.',
+            new AccountResource($account)
+        );
+    }
+
     public function updateAnalytics(UpdateSiteAnalyticRequest $request, Account $account)
     {
         $account = $account->Service()->updateAnalytics(
