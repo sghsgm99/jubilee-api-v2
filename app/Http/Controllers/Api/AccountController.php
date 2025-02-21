@@ -141,4 +141,15 @@ class AccountController extends Controller
 
         return ResponseService::success('Account analytics was updated.', new AccountResource($account));
     }
+
+    public function updateAnalyticsEx(UpdateSiteAnalyticRequest $request, Account $account)
+    {
+        $account = $account->Service()->updateAnalyticsEx(
+            $request->validated()['view_id'],
+            $request->file('analytic_file'),
+            $request->validated()['analytic_script'],
+        );
+
+        return ResponseService::success('Account analytics was updated.', new AccountResource($account));
+    }
 }
